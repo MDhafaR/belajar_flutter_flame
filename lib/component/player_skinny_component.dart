@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:belajar_flutter_flame/constant/global.dart';
 import 'package:belajar_flutter_flame/flutter_game/fit_fighter.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
 class PlayerSkinnyComponent extends SpriteComponent
-    with HasGameRef<FitFighter> {
+    with HasGameRef<FitFighter>, CollisionCallbacks {
   final double _playerSize = 100;
   final double _playerSpeed = 500;
 
@@ -67,5 +68,10 @@ class PlayerSkinnyComponent extends SpriteComponent
     // ini itu sama saja kita dengan memberikan margin atau bisa dibilang pembatas di setiap sisinya
     _leftBound = 60;
     _rightBound = gameRef.size.x - 60;
+
+    // ini digunakan untuk memberikan box di player
+    // jika ingin melihat box nya kamu bisa menggunakan kode debugMode
+    // debugMode = true;
+    add(RectangleHitbox());
   }
 }
