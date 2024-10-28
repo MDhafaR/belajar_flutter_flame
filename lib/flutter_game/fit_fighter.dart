@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:belajar_flutter_flame/component/background_component.dart';
 import 'package:belajar_flutter_flame/component/player_skinny_component.dart';
+import 'package:belajar_flutter_flame/inputs/joystick.dart';
 import 'package:flame/game.dart';
 
 class FitFighter extends FlameGame {
@@ -11,5 +12,6 @@ class FitFighter extends FlameGame {
     // add digunakan untuk menambahkan komponen
     add(BackgroundComponent());
     add(PlayerSkinnyComponent());
+    add(joystickComponent);
   }
 }
