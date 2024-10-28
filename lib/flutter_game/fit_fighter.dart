@@ -12,20 +12,14 @@ import 'package:flame_audio/flame_audio.dart';
 
 class FitFighter extends FlameGame with HasCollisionDetection {
 
-  Vector2 _randomPosition() {
-    double x = Random().nextInt(300 - 50).toDouble();
-    double y = Random().nextInt(200 - 50).toDouble();
-    return Vector2(x, y);
-  }
-
   @override
   Future<void> onLoad() async {
     super.onLoad();
     // add digunakan untuk menambahkan komponen
     add(BackgroundComponent());
     add(DumbbellComponent());
-    add(VirusComponent(startPosition: _randomPosition()));
-    add(VirusComponent(startPosition: _randomPosition()));
+    add(VirusComponent(startPosition: Vector2(60, 60)));
+    add(VirusComponent(startPosition: Vector2(size.x - 60, size.y - 60)));
     add(PlayerSkinnyComponent(joystickComponent: joystickComponent));
     add(joystickComponent);
 

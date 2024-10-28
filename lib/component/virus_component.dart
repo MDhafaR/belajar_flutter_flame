@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:belajar_flutter_flame/component/player_skinny_component.dart';
 import 'package:belajar_flutter_flame/constant/global.dart';
@@ -14,6 +15,25 @@ class VirusComponent extends SpriteComponent
 
   VirusComponent({required this.startPosition});
 
+  late Vector2 _kecepatan;
+  final double _speed = 300;
+  Vector2 _moveVirus() {
+    // Menghasilkan sudut acak antara 0 sampai 2π (360 derajat)
+    final randomAngle = Random().nextDouble() * 2 * pi;
+
+    // Menghitung komponen y dari arah gerak menggunakan sin
+    final sinAngle = sin(randomAngle);
+    // Menghitung komponen x dari arah gerak menggunakan cos
+    final cosAngle = cos(randomAngle);
+
+    // Menghitung kecepatan pada sumbu x
+    final double vx = cosAngle * _speed;
+    // Menghitung kecepatan pada sumbu y
+    final double vy = sinAngle * _speed;
+
+    return Vector2(vx, vy);
+  }
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -21,8 +41,15 @@ class VirusComponent extends SpriteComponent
     position = startPosition;
     height = width = _sizeVirus;
     anchor = Anchor.center;
+    _kecepatan = _moveVirus();
 
-    add(RectangleHitbox());
+    add(CircleHitbox());
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    position += _kecepatan * dt;
   }
 
   @override
