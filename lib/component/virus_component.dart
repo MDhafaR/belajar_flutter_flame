@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:belajar_flutter_flame/component/player_skinny_component.dart';
 import 'package:belajar_flutter_flame/constant/global.dart';
 import 'package:belajar_flutter_flame/flutter_game/fit_fighter.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
 
 class VirusComponent extends SpriteComponent
     with HasGameRef<FitFighter>, CollisionCallbacks {
@@ -55,10 +53,28 @@ class VirusComponent extends SpriteComponent
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    // ketika dumble terkena player maka Virus akan hilang dengan mengeluarkan sound
-    if (other is PlayerSkinnyComponent) {
-      FlameAudio.play(Globals.virusSound);
-      removeFromParent();
+
+    // pengecekan ketika virus terkena layar
+    if (other is ScreenHitbox) {
+      final Vector2 collisionPoint = intersectionPoints.first;
+
+      // Menggunakan if-else if untuk memastikan hanya satu kondisi yang dijalankan
+      if (collisionPoint.x <= 0) {
+        // Memantul dari dinding kiri
+        _kecepatan.x = _speed.abs();
+      } else if (collisionPoint.x >= gameRef.size.x - _sizeVirus) {
+        // Memantul dari dinding kanan
+        _kecepatan.x = -_speed.abs();
+      } else if (collisionPoint.y <= 0) {
+        // Memantul dari dinding atas
+        _kecepatan.y = _speed.abs();
+      } else if (collisionPoint.y >= gameRef.size.y - _sizeVirus) {
+        // Memantul dari dinding bawah
+        _kecepatan.y = -_speed.abs();
+      }
+
+      // Normalisasi kecepatan untuk mempertahankan kecepatan konstan
+      _kecepatan = _kecepatan.normalized() * _speed;
     }
   }
 }

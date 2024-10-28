@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:belajar_flutter_flame/component/virus_component.dart';
 import 'package:belajar_flutter_flame/constant/global.dart';
 import 'package:belajar_flutter_flame/flutter_game/fit_fighter.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 class PlayerSkinnyComponent extends SpriteComponent
     with HasGameRef<FitFighter>, CollisionCallbacks {
@@ -19,38 +21,65 @@ class PlayerSkinnyComponent extends SpriteComponent
   JoystickComponent joystickComponent;
   PlayerSkinnyComponent({required this.joystickComponent});
 
+  late Sprite playerSkinny;
+  late Sprite playerFever;
+  bool virusAttack = false;
+  final Timer _timer = Timer(2); // 3 detik
+
+  void freezePlayer() {
+    virusAttack = true;
+    FlameAudio.play(Globals.virusSound);
+    sprite = playerFever;
+    _timer.start();
+  }
+
+  void unFreezePlayer() {
+    virusAttack = false;
+    sprite = playerSkinny;
+    _timer.stop();
+  }
+
   @override
   void update(double dt) {
-    super.update(dt);
-    // jika joystick tidak di gerakkan oleh user
-    if (joystickComponent.direction == JoystickDirection.idle) return;
+    if (virusAttack == false) {
+      super.update(dt);
+      // jika joystick tidak di gerakkan oleh user
+      if (joystickComponent.direction == JoystickDirection.idle) return;
 
-    // jika joystick di gerakkan oleh user
-    position.add(joystickComponent.relativeDelta * _playerSpeed * dt);
+      // jika joystick di gerakkan oleh user
+      position.add(joystickComponent.relativeDelta * _playerSpeed * dt);
 
-    // logika maksimal posisi player
-    // dengan kita menggunakan logika seperti ini maka akan ada pembatas untuk maksimal x dan y atau kanan kiri atas bawah
-    // x atau y itu adalah posisi dari player kita, jadi
-    // kalau player(x) lebih atau sama dengan berada pada _rightBound maka player kita dipaksa untuk diam dan tidak bisa melebihi _rightBound tersebut
-    if (x >= _rightBound) {
-      x = _rightBound;
-    }
-    if (x <= _leftBound) {
-      x = _leftBound;
-    }
-    if (y <= _topBound) {
-      y = _topBound;
-    }
-    if (y >= _bottomBound) {
-      y = _bottomBound;
+      // logika maksimal posisi player
+      // dengan kita menggunakan logika seperti ini maka akan ada pembatas untuk maksimal x dan y atau kanan kiri atas bawah
+      // x atau y itu adalah posisi dari player kita, jadi
+      // kalau player(x) lebih atau sama dengan berada pada _rightBound maka player kita dipaksa untuk diam dan tidak bisa melebihi _rightBound tersebut
+      if (x >= _rightBound) {
+        x = _rightBound;
+      }
+      if (x <= _leftBound) {
+        x = _leftBound;
+      }
+      if (y <= _topBound) {
+        y = _topBound;
+      }
+      if (y >= _bottomBound) {
+        y = _bottomBound;
+      }
+    } else {
+      _timer.update(dt);
+      if (_timer.finished) {
+        unFreezePlayer();
+      }
     }
   }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // digunakan untuk menambahkan komponen player
-    sprite = await gameRef.loadSprite(Globals.playerSkinny);
+
+    playerSkinny = await gameRef.loadSprite(Globals.playerSkinny);
+    playerFever = await gameRef.loadSprite(Globals.playerFever);
+    sprite = playerSkinny;
     // digunakan untuk menentukan ukuran player
     height = width = _playerSize;
     // digunakan untuk menentukan posisi player
@@ -73,5 +102,13 @@ class PlayerSkinnyComponent extends SpriteComponent
     // jika ingin melihat box nya kamu bisa menggunakan kode debugMode
     // debugMode = true;
     add(RectangleHitbox());
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
+    if (other is VirusComponent) {
+      freezePlayer();
+    }
   }
 }
