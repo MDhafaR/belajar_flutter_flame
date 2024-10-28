@@ -39,6 +39,7 @@ class DumbbellComponent extends SpriteComponent
     if (other is PlayerSkinnyComponent) {
       FlameAudio.play(Globals.dumbbellSound);
       removeFromParent();
+      gameRef.dumbbellScore++;
       // membuat dumble muncul lagi ketika sudah hilang
       gameRef.add(DumbbellComponent());
     }

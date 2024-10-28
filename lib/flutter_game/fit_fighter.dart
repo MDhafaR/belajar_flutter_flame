@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:belajar_flutter_flame/component/background_component.dart';
 import 'package:belajar_flutter_flame/component/dumbbell_component.dart';
@@ -14,10 +13,11 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 
 class FitFighter extends FlameGame with HasCollisionDetection {
-  int score = 0;
+  int dumbbellScore = 0;
   late Timer timer;
   late TextComponent scoreText;
-  late int remainingTime;
+  late TextComponent timeText;
+  int remainingTime = 30;
 
   @override
   Future<void> onLoad() async {
@@ -56,12 +56,29 @@ class FitFighter extends FlameGame with HasCollisionDetection {
     timer.start();
 
     scoreText = TextComponent(
-        text: "Score: $score",
+        text: "Score: $dumbbellScore",
         position: Vector2(50, 50),
         anchor: Anchor.center,
         textRenderer:
             TextPaint(style: TextStyle(color: Colors.black, fontSize: 24)));
 
     add(scoreText);
+
+    timeText = TextComponent(
+        text: "Time: $remainingTime detik",
+        position: Vector2(80, scoreText.height + 50 + 10),
+        anchor: Anchor.center,
+        textRenderer:
+            TextPaint(style: TextStyle(color: Colors.black, fontSize: 24)));
+
+    add(timeText);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    timer.update(dt);
+    scoreText.text = "Score: $dumbbellScore";
+    timeText.text = "Time: $remainingTime detik";
   }
 }
