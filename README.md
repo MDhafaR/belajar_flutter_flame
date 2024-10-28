@@ -1,16 +1,6 @@
 # belajar_flutter_flame
 
-A new Flutter project.
+- upgrade gradle pada gradle-wrapper.properties
+- upgrade AGP dengan mengubah [id "com.android.application" version "8.7.1" apply false] pada settings.gradle
+- yang terakhir ubah ndk version nya mengikuti error yang disuruh 
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
