@@ -11,7 +11,7 @@ class FitFighter extends FlameGame {
     super.onLoad();
     // add digunakan untuk menambahkan komponen
     add(BackgroundComponent());
-    add(PlayerSkinnyComponent());
+    add(PlayerSkinnyComponent(joystickComponent: joystickComponent));
     add(joystickComponent);
   }
 }
