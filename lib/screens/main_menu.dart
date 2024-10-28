@@ -1,4 +1,5 @@
 import 'package:belajar_flutter_flame/constant/global.dart';
+import 'package:belajar_flutter_flame/screens/game_play.dart';
 import 'package:flutter/material.dart';
 
 class MainMenu extends StatelessWidget {
@@ -31,7 +32,12 @@ class MainMenu extends StatelessWidget {
                 width: 200,
                 height: 50,
                 child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const GamePlay()));
+                    },
                     child: const Text(
                       "Play",
                       style: TextStyle(fontSize: 25),

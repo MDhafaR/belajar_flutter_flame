@@ -1,5 +1,6 @@
 import 'package:belajar_flutter_flame/constant/global.dart';
 import 'package:belajar_flutter_flame/flutter_game/fit_fighter.dart';
+import 'package:belajar_flutter_flame/screens/main_menu.dart';
 import 'package:flutter/material.dart';
 
 class GameOverMenu extends StatelessWidget {
@@ -37,6 +38,9 @@ class GameOverMenu extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    gameRef.overlays.remove(GameOverMenu.ID);
+                    gameRef.resetGame();
+                    gameRef.resumeEngine();
                   },
                   child: const Text(
                     "Play Again ?",
@@ -52,6 +56,12 @@ class GameOverMenu extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
+                    gameRef.overlays.remove(GameOverMenu.ID);
+                    gameRef.resetGame();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainMenu()));
                   },
                   child: const Text(
                     "Main Menu",

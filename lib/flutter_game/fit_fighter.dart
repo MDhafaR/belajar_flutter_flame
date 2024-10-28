@@ -6,6 +6,7 @@ import 'package:belajar_flutter_flame/component/player_skinny_component.dart';
 import 'package:belajar_flutter_flame/component/virus_component.dart';
 import 'package:belajar_flutter_flame/constant/global.dart';
 import 'package:belajar_flutter_flame/inputs/joystick.dart';
+import 'package:belajar_flutter_flame/screens/game_over_menu.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/text.dart';
@@ -47,6 +48,7 @@ class FitFighter extends FlameGame with HasCollisionDetection {
       onTick: () {
         if (remainingTime == 0) {
           pauseEngine();
+          overlays.add(GameOverMenu.ID);
         } else {
           remainingTime--;
         }
@@ -72,6 +74,12 @@ class FitFighter extends FlameGame with HasCollisionDetection {
             TextPaint(style: TextStyle(color: Colors.black, fontSize: 24)));
 
     add(timeText);
+  }
+
+  void resetGame() {
+    dumbbellScore = 0;
+    remainingTime = 30;
+    timer.stop();
   }
 
   @override
